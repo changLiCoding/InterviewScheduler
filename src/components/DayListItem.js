@@ -23,7 +23,7 @@ export default function DayListItem(props) {
 		<li
 			className={itemClass}
 			onClick={(event) => {
-				props.setDay(props.name);
+				props.onChange(props.name);
 				// setIsSelected(!isSelected);
 			}}>
 			<h2 className='text--regular'>{props.name}</h2>
