@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 import "components/DayListItem.scss";
 
 export default function DayListItem(props) {
+	const { selected } = props;
 	const formatSpots = (spot) => {
 		let res = !spot
 			? "no spots remaining"
@@ -12,10 +13,9 @@ export default function DayListItem(props) {
 			: `${spot} spots remaining`;
 		return res;
 	};
-	// const [isSelected, setIsSelected] = useState(false);
 
 	const itemClass = classNames("day-list__item", {
-		"day-list__item--selected": props.name === props.day,
+		"day-list__item--selected": selected,
 		"day-list__item--full": props.spots === 0,
 	});
 
@@ -23,9 +23,7 @@ export default function DayListItem(props) {
 		<li
 			className={itemClass}
 			onClick={(event) => {
-				console.log(event);
 				props.setDay(props.name);
-				console.log(props.day);
 				// setIsSelected(!isSelected);
 			}}>
 			<h2 className='text--regular'>{props.name}</h2>
