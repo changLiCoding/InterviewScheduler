@@ -16,12 +16,30 @@ const getAppointmentsForDay = function (state, day) {
 	return res;
 };
 
+const getInterviewersForDay = function (state, day) {
+	let res = [];
+	if (state.days.length === 0) {
+		return [];
+	}
+	const checkDayValue = day;
+	const interviewersIdArr = state.days.filter(
+		(day) => day.name === checkDayValue
+	)[0]?.interviewers;
+	// console.log(`The interviewers ID availible for today: ${interviewersIdArr}`);
+	if (!interviewersIdArr) return res;
 
-const getInterview=function (state, interview) {
-	if(interview === null) return null
-	const interviewer=state.interviewers[interview.interviewer];
-	return {...interview, interviewer}
-}
+	const allInterviewersArr = Object.values(state.interviewers);
+	res = allInterviewersArr.filter((interviewer) =>
+		interviewersIdArr.includes(interviewer.id)
+	);
+	// console.log(res);
+	return res;
+};
 
+const getInterview = function (state, interview) {
+	if (interview === null) return null;
+	const interviewer = state.interviewers[interview.interviewer];
+	return { ...interview, interviewer };
+};
 
-module.exports = { getAppointmentsForDay, getInterview };
+module.exports = { getAppointmentsForDay, getInterview, getInterviewersForDay };
