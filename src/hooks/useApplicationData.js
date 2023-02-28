@@ -5,13 +5,61 @@ import axios from "axios";
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
-const DELETE_INTERVIEW = "DELETE_INTERVIEW";
 
-const updateSpots = (id, newState) => {
+const reducer = function (state, action) {
+	switch (action.type) {
+		case SET_DAY:
+			return { ...state, day: action.day };
+		case SET_APPLICATION_DATA:
+			return {
+				...state,
+				appointments: action.appointments,
+				days: action.days,
+				interviewers: action.interviewers,
+			};
+		case SET_INTERVIEW:
+			const newState = updateSpots(
+				action.dataToUpdate.id,
+				state,
+				action.dataToUpdate.interview
+			);
+			return {
+				...state,
+				...newState,
+			};
+
+		default:
+			throw new Error(`
+      Tried to reduce with unsupported action type: ${action.type}
+      `);
+	}
+};
+
+const updateSpots = (id, state, interview) => {
+	let appointment,
+		appointments = {};
+	if (interview === null) {
+		appointment = {
+			...state.appointments[id],
+			interview: null,
+		};
+	} else {
+		appointment = {
+			...state.appointments[id],
+			interview: { ...interview },
+		};
+	}
+
+	appointments = {
+		...state.appointments,
+		[id]: appointment,
+	};
+
+	const newState = { ...state, appointments };
+
 	const theDayOfAppointmentsObj = newState.days.find((day) =>
 		day.appointments.includes(id)
 	);
-	console.log(theDayOfAppointmentsObj);
 	const spotsOfTheDay = theDayOfAppointmentsObj.appointments.reduce(
 		(prev, curv) => {
 			if (newState.appointments[curv].interview === null) {
@@ -34,31 +82,6 @@ const updateSpots = (id, newState) => {
 	return newState;
 };
 
-const reducer = function (state, action) {
-	switch (action.type) {
-		case SET_DAY:
-			console.log(action.day);
-			return { ...state, day: action.day };
-		case SET_APPLICATION_DATA:
-			console.log(action.days, action.interviewers);
-			return {
-				...state,
-				appointments: action.appointments,
-				days: action.days,
-				interviewers: action.interviewers,
-			};
-		case SET_INTERVIEW:
-			return { ...state, ...updateSpots(action.id, { ...action.newState }) };
-		case DELETE_INTERVIEW:
-			return { ...state, ...updateSpots(action.id, { ...action.newState }) };
-
-		default:
-			throw new Error(`
-      Tried to reduce with unsupported action type: ${action.type}
-      `);
-	}
-};
-
 export default function useApplicationData() {
 	const [state, dispatch] = useReducer(reducer, {
 		day: "Monday",
@@ -70,6 +93,19 @@ export default function useApplicationData() {
 	const setDay = (day) => dispatch({ type: SET_DAY, day });
 
 	useEffect(() => {
+		const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+		ws.onopen = (event) => {
+			ws.send(`ping`);
+		};
+
+		ws.onmessage = (event) => {
+			const msgFromServer = JSON.parse(event.data);
+			if (msgFromServer.type) {
+				const { type, id, interview } = msgFromServer;
+				const dataToUpdate = { id, interview };
+				dispatch({ type, dataToUpdate });
+			}
+		};
 		Promise.all([
 			axios.get("/api/days"),
 			axios.get("/api/appointments"),
@@ -87,44 +123,24 @@ export default function useApplicationData() {
 	}, []);
 
 	const bookInterview = function (id, interview) {
+		const dataToUpdate = { id, interview };
 		return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-			const appointment = {
-				...state.appointments[id],
-				interview: { ...interview },
-			};
-
-			const appointments = {
-				...state.appointments,
-				[id]: appointment,
-			};
 			dispatch({
 				type: SET_INTERVIEW,
-				id,
-				newState: { ...state, appointments },
+				dataToUpdate,
 			});
 		});
 	};
 
 	const cancelInterview = function (id) {
-		return axios
-			.delete(`/api/appointments/${id}`, { interview: null })
-			.then(() => {
-				const appointment = {
-					...state.appointments[id],
-					interview: null,
-				};
-
-				const appointments = {
-					...state.appointments,
-					[id]: appointment,
-				};
-
-				dispatch({
-					type: DELETE_INTERVIEW,
-					id,
-					newState: { ...state, appointments },
-				});
+		return axios.delete(`/api/appointments/${id}`).then(() => {
+			const interview = null;
+			const dataToUpdate = { id, interview };
+			dispatch({
+				type: SET_INTERVIEW,
+				dataToUpdate,
 			});
+		});
 	};
 
 	return {

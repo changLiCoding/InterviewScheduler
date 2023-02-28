@@ -25,14 +25,12 @@ const getInterviewersForDay = function (state, day) {
 	const interviewersIdArr = state.days.filter(
 		(day) => day.name === checkDayValue
 	)[0]?.interviewers;
-	// console.log(`The interviewers ID availible for today: ${interviewersIdArr}`);
 	if (!interviewersIdArr) return res;
 
 	const allInterviewersArr = Object.values(state.interviewers);
 	res = allInterviewersArr.filter((interviewer) =>
 		interviewersIdArr.includes(interviewer.id)
 	);
-	// console.log(res);
 	return res;
 };
 
