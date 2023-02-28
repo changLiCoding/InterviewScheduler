@@ -7,10 +7,8 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Error from "./Error";
-import useVisualMode from "hooks/useVisualMode";
-
-import { getInterviewersForDay } from "helpers/selectors";
 import Confirm from "./Confirm";
+import useVisualMode from "hooks/useVisualMode";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";

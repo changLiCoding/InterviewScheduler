@@ -30,6 +30,33 @@ export default function useApplicationData() {
 			.catch((err) => console.error(err));
 	}, []);
 
+	const updateSpots = (id, newState) => {
+		const theDayOfAppointmentsObj = newState.days.find((day) =>
+			day.appointments.includes(id)
+		);
+		console.log(theDayOfAppointmentsObj);
+		const spotsOfTheDay = theDayOfAppointmentsObj.appointments.reduce(
+			(prev, curv) => {
+				if (newState.appointments[curv].interview === null) {
+					prev++;
+				}
+				return prev;
+			},
+			0
+		);
+		theDayOfAppointmentsObj.spots = spotsOfTheDay;
+
+		const days = newState.days.map((day) => {
+			if (day.id === theDayOfAppointmentsObj.id) {
+				return theDayOfAppointmentsObj;
+			} else {
+				return day;
+			}
+		});
+		newState.days = days;
+		return newState;
+	};
+
 	const bookInterview = function (id, interview) {
 		return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
 			const appointment = {
@@ -41,18 +68,38 @@ export default function useApplicationData() {
 				...state.appointments,
 				[id]: appointment,
 			};
-			setState((prev) => ({
-				...prev,
-				appointments,
-			}));
+			setState((prev) => {
+				let newState = {
+					...prev,
+					appointments,
+				};
+
+				return updateSpots(id, newState);
+			});
 		});
 	};
 
 	const cancelInterview = function (id) {
-		return axios.delete(`/api/appointments/${id}`, { interview: null });
-		// .catch((err) =>
-		// 	console.error(`Got error from deleting interview: ${err.message}`)
-		// );
+		return axios
+			.delete(`/api/appointments/${id}`, { interview: null })
+			.then(() => {
+				const appointment = {
+					...state.appointments[id],
+					interview: null,
+				};
+
+				const appointments = {
+					...state.appointments,
+					[id]: appointment,
+				};
+				setState((prev) => {
+					const newstate = {
+						...prev,
+						appointments,
+					};
+					return updateSpots(id, newstate);
+				});
+			});
 	};
 
 	return { setDay, state, cancelInterview, bookInterview };
