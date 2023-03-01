@@ -76,7 +76,20 @@ export default {
 				});
 
 			default:
-				throw new Error("Wrong URL");
+				return Promise.reject({
+					error: "Wrong URL",
+				});
+		}
+	}),
+	put: jest.fn((url) => {
+		switch (url) {
+			case "/api/appointments/1":
+				return Promise.resolve({ status: 204, statusText: "No Content" });
+
+			default:
+				return Promise.reject({
+					error: "Wrong URL",
+				});
 		}
 	}),
 };
