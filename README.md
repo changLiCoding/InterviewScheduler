@@ -13,35 +13,64 @@ The scheduler API server is made with Express and Node.js at [scheduler-api](htt
 1. Clone the repository
 
 ```
-git clone interviewScheduler
+git clone git@github.com:javascriptsucks/InterviewScheduler.git interviewScheduler
 ```
 
-1. Install npm packages
+2. Change directory to the Scheduler
+
+```
+cd interviewScheduler
+```
+
+3. Install npm packages
 
 ```
 npm install
 ```
 
-2. Run application
+4. Run application
 
 ```
 npm start
 ```
 
-## Running Webpack Development Server
+## Test
 
-```sh
-npm start
+Tests were done by Storybook, Jest, and Cypress with a code coverage of 95%
+
+1. Jest integration and unit tests
+
 ```
-
-## Running Jest Test Framework
-
-```sh
 npm test
 ```
 
-## Running Storybook Visual Testbed
+2. Cypress ETE tests
 
-```sh
+```
+npm run cypress
+```
+
+3. Storybook components isolation tests
+
+```
 npm run storybook
 ```
+
+## Dependencies
+
+### Dependencies
+
+⋅⋅*Normalize.css
+⋅⋅*Axios
+⋅⋅*Classnames
+⋅⋅*React
+
+### Dev-Dependencies
+
+⋅⋅*React-scripts
+⋅⋅*Storybook
+⋅⋅*Jest-Dom
+⋅⋅*Cypress
+⋅⋅*SASS
+⋅⋅*React-testing-library
+⋅⋅\*prop-types
