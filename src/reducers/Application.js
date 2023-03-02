@@ -38,13 +38,10 @@ const updateSpots = (id, state, interview) => {
 	);
 	theDayOfAppointmentsObj.spots = spotsOfTheDay;
 
-	const days = newState.days.map((day) => {
-		if (day.id === theDayOfAppointmentsObj.id) {
-			return theDayOfAppointmentsObj;
-		} else {
-			return day;
-		}
-	});
+	const days = newState.days.map((day) =>
+		day.id === theDayOfAppointmentsObj.id ? theDayOfAppointmentsObj : day
+	);
+
 	newState.days = days;
 	return newState;
 };
