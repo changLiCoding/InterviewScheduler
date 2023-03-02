@@ -60,17 +60,17 @@ npm run storybook
 
 ### Dependencies
 
-⋅⋅*Normalize.css
-⋅⋅*Axios
-⋅⋅*Classnames
-⋅⋅*React
+- Normalize.css
+- Axios
+- Classnames
+- React
 
 ### Dev-Dependencies
 
-⋅⋅*React-scripts
-⋅⋅*Storybook
-⋅⋅*Jest-Dom
-⋅⋅*Cypress
-⋅⋅*SASS
-⋅⋅*React-testing-library
-⋅⋅\*prop-types
+- React-scripts
+- Storybook
+- Jest-Dom
+- Cypress
+- SASS
+- React-testing-library
+- prop-types
