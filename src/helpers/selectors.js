@@ -1,4 +1,4 @@
-const getAppointmentsForDay = function (state, day) {
+export const getAppointmentsForDay = function (state, day) {
 	let res = [];
 	if (state.days.length === 0) {
 		return [];
@@ -16,7 +16,7 @@ const getAppointmentsForDay = function (state, day) {
 	return res;
 };
 
-const getInterviewersForDay = function (state, day) {
+export const getInterviewersForDay = function (state, day) {
 	let res = [];
 	if (state.days.length === 0) {
 		return [];
@@ -34,10 +34,8 @@ const getInterviewersForDay = function (state, day) {
 	return res;
 };
 
-const getInterview = function (state, interview) {
+export const getInterview = function (state, interview) {
 	if (interview === null) return null;
 	const interviewer = state.interviewers[interview.interviewer];
 	return { ...interview, interviewer };
 };
-
-module.exports = { getAppointmentsForDay, getInterview, getInterviewersForDay };
