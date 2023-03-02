@@ -8,7 +8,7 @@ import {
 	getAppointmentsForDay,
 	getInterview,
 	getInterviewersForDay,
-} from "helpers/selectors";
+} from "../helpers/selectors";
 
 export default function Application(props) {
 	const { state, setDay, cancelInterview, bookInterview } =
