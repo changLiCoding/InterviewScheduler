@@ -6,11 +6,27 @@ The scheduler API server is made with Express and Node.js at [scheduler-api](htt
 
 ## ScreenShot
 
-![real-time update]()
+![real-time update](https://github.com/javascriptsucks/InterviewScheduler/blob/master/image/schedulerImg.gif)
 
-## Setup
+## Get Start
 
-Install dependencies with `npm install`.
+1. Clone the repository
+
+```
+git clone interviewScheduler
+```
+
+1. Install npm packages
+
+```
+npm install
+```
+
+2. Run application
+
+```
+npm start
+```
 
 ## Running Webpack Development Server
 
