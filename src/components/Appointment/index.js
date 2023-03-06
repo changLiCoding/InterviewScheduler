@@ -45,14 +45,13 @@ export default function Appointment(props) {
 				transition(SHOW);
 			})
 			.catch((error) => {
-				console.error(error);
-
 				transition(ERROR_SAVE, true);
+				console.error(error);
 			});
 	};
 
 	const onConfirmDestroy = function () {
-		transition(DELETING);
+		transition(DELETING, true);
 		cancelInterview(id)
 			.then(() => {
 				transition(EMPTY);
