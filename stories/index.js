@@ -81,7 +81,7 @@ storiesOf("DayListItem", module) //Initiates Storybook and registers our DayList
 	.add("Clickable", () => (
 		<DayListItem
 			name='Tuesday'
-			setDay={action("setDay")}
+			onChange={action("setDay")}
 			spots={5}
 		/> // action() allows us to create a callback that appears in the actions panel when clicked
 	));
