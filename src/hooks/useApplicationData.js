@@ -42,6 +42,9 @@ export default function useApplicationData() {
 				});
 			})
 			.catch((err) => console.error(err));
+		return () => {
+			ws.close();
+		};
 	}, []);
 
 	const bookInterview = function (id, interview) {
